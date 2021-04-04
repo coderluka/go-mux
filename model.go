@@ -17,6 +17,29 @@ func (p *product) getProduct(db *sql.DB) error {
 		p.ID).Scan(&p.Name, &p.Price)
 }
 
+func filterProduct(db *sql.DB, toFind string) ([]product, error) {
+	rows, err := db.Query("SELECT name FROM products WHERE name=$1",
+		toFind)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	products := []product{}
+
+	for rows.Next() {
+		var p product
+		if err := rows.Scan(&p.Name); err != nil {
+			return nil, err
+		}
+		products = append(products, p)
+	}
+
+	return products, nil
+}
+
 func getAscProducts(db *sql.DB) ([]product, error) {
 	rows, err := db.Query("SELECT price FROM products ORDER BY price ASC")
 

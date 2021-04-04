@@ -133,6 +133,16 @@ func TestGetAscProduct(t *testing.T) {
 	checkResponseCode(t, http.StatusOK, response.Code)
 }
 
+func TestFilterProduct(t *testing.T) {
+	clearTable()
+	addProducts(6)
+
+	req, _ := http.NewRequest("GET", "/product/filter", nil)
+	response := executeRequest(req)
+
+	checkResponseCode(t, http.StatusOK, response.Code)
+}
+
 func addProducts(count int) {
 	if count < 1 {
 		count = 1
