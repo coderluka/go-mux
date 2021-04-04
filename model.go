@@ -17,6 +17,29 @@ func (p *product) getProduct(db *sql.DB) error {
         p.ID).Scan(&p.Name, &p.Price)
 }
 
+func getAscProducts(db *sql.DB) ([]product, error) {
+    rows, err := db.Query("SELECT * FROM products ORDER BY price ASC")
+
+    if err != nil {
+	return nil, err
+    }
+
+    defer rows.Close()
+
+    products := []product{}
+
+    for rows.Next() {
+        var p product
+        if err := rows.Scan(&p.Price); err != nil {
+            return nil, err
+        }
+        products = append(products, p)
+    }
+
+    return products, nil
+
+}
+
 func (p *product) updateProduct(db *sql.DB) error {
     _, err :=
         db.Exec("UPDATE products SET name=$1, price=$2 WHERE id=$3",

@@ -57,7 +57,6 @@ func TestEmptyTable(t *testing.T) {
     }
 }
 
-
 func executeRequest(req *http.Request) *httptest.ResponseRecorder {
     rr := httptest.NewRecorder()
     a.Router.ServeHTTP(rr, req)
@@ -65,13 +64,11 @@ func executeRequest(req *http.Request) *httptest.ResponseRecorder {
     return rr
 }
 
-
 func checkResponseCode(t *testing.T, expected, actual int) {
     if expected != actual {
         t.Errorf("Expected response code %d. Got %d\n", expected, actual)
     }
 }
-
 
 func TestGetNonExistentProduct(t *testing.T) {
     clearTable()
@@ -87,7 +84,6 @@ func TestGetNonExistentProduct(t *testing.T) {
         t.Errorf("Expected the 'error' key of the response to be set to 'Product not found'. Got '%s'", m["error"])
     }
 }
-
 
 func TestCreateProduct(t *testing.T) {
 
@@ -118,7 +114,6 @@ func TestCreateProduct(t *testing.T) {
     }
 }
 
-
 func TestGetProduct(t *testing.T) {
     clearTable()
     addProducts(1)
@@ -129,7 +124,15 @@ func TestGetProduct(t *testing.T) {
     checkResponseCode(t, http.StatusOK, response.Code)
 }
 
-// main_test.go
+func TestGetAscProduct(t *testing.T) {
+    clearTable()
+    addProducts(5)
+
+    req, _ := http.NewRequest("GET", "/products-asc", nil)
+    response := executeRequest(req)
+
+    checkResponseCode(t, http.StatusOK, response.Code)
+}
 
 func addProducts(count int) {
     if count < 1 {
@@ -140,7 +143,6 @@ func addProducts(count int) {
         a.DB.Exec("INSERT INTO products(name, price) VALUES($1, $2)", "Product "+strconv.Itoa(i), (i+1.0)*10)
     }
 }
-
 
 func TestUpdateProduct(t *testing.T) {
 
@@ -175,7 +177,6 @@ func TestUpdateProduct(t *testing.T) {
         t.Errorf("Expected the price to change from '%v' to '%v'. Got '%v'", originalProduct["price"], m["price"], m["price"])
     }
 }
-
 
 func TestDeleteProduct(t *testing.T) {
     clearTable()

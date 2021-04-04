@@ -54,6 +54,15 @@ func (a *App) getProduct(w http.ResponseWriter, r *http.Request) {
     respondWithJSON(w, http.StatusOK, p)
 }
 
+func (a *App) getAscProducts(w http.ResponseWriter, r *http.Request) {
+    products, err := getAscProducts(a.DB)
+    if err != nil {
+        respondWithError(w, http.StatusInternalServerError, err.Error())
+        return
+    }
+
+    respondWithJSON(w, http.StatusOK, products)
+}
 
 func respondWithError(w http.ResponseWriter, code int, message string) {
     respondWithJSON(w, code, map[string]string{"error": message})
@@ -104,7 +113,6 @@ func (a *App) createProduct(w http.ResponseWriter, r *http.Request) {
     respondWithJSON(w, http.StatusCreated, p)
 }
 
-
 func (a *App) updateProduct(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
     id, err := strconv.Atoi(vars["id"])
@@ -147,9 +155,9 @@ func (a *App) deleteProduct(w http.ResponseWriter, r *http.Request) {
     respondWithJSON(w, http.StatusOK, map[string]string{"result": "success"})
 }
 
-
 func (a *App) initializeRoutes() {
     a.Router.HandleFunc("/products", a.getProducts).Methods("GET")
+    a.Router.HandleFunc("/products-asc", a.getAscProducts).Methods("GET")
     a.Router.HandleFunc("/product", a.createProduct).Methods("POST")
     a.Router.HandleFunc("/product/{id:[0-9]+}", a.getProduct).Methods("GET")
     a.Router.HandleFunc("/product/{id:[0-9]+}", a.updateProduct).Methods("PUT")

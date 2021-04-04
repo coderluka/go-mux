@@ -1,6 +1,7 @@
 // main.go
 package main
 import "os"
+import "app"
 
 func main() {
 	a:=App{}
