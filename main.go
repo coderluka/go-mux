@@ -1,13 +1,15 @@
 // main.go
 package main
-import "os"
-import "app"
+import (
+	"fmt"
+)
 
 func main() {
+	fmt.Println("HAllo")
 	a:=App{}
 	a.Initialize(
-		os.Getenv("APP_DB_USERNAME"),
-		os.Getenv("APP_DB_PASSWORD"),
-		os.Getenv("APP_DB_NAME"))
+		"postgres",//os.Getenv("APP_DB_USERNAME"),
+		"1234567890",//os.Getenv("APP_DB_PASSWORD"),
+		"cdue02")//os.Getenv("APP_DB_NAME"))
 	a.Run(":8010")
 }
