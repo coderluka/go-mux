@@ -18,7 +18,7 @@ func TestMain(m *testing.M) {
 	a.Initialize(
 		"postgres",
 		"1234567890",
-		"cdue02")
+		"postgres")
 	ensureTableExists()
 	code := m.Run()
 	clearTable()
