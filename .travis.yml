@@ -12,3 +12,6 @@ services:
 script:
   # Test the code
   - go test -v
+
+  # Build the code
+  - go build -o myArtifact
